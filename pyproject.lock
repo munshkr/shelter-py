@@ -1,0 +1,136 @@
+[[package]]
+platform = "UNKNOWN"
+description = "Atomic file writes."
+python-versions = "*"
+version = "1.1.5"
+name = "atomicwrites"
+optional = false
+category = "dev"
+
+[[package]]
+platform = "*"
+description = "Classes Without Boilerplate"
+python-versions = "*"
+version = "18.1.0"
+name = "attrs"
+optional = false
+category = "dev"
+
+[[package]]
+platform = "UNKNOWN"
+description = "Cross-platform colored terminal text."
+python-versions = "*"
+version = "0.3.9"
+name = "colorama"
+optional = false
+category = "dev"
+
+[package.requirements]
+platform = "win32"
+[[package]]
+platform = "UNKNOWN"
+description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+"
+python-versions = "*"
+version = "1.0.2"
+name = "funcsigs"
+optional = false
+category = "dev"
+
+[package.requirements]
+python = "<3.0"
+[package.dependencies]
+ordereddict = "*"
+[[package]]
+platform = "*"
+description = "More routines for operating on iterables, beyond itertools"
+python-versions = "*"
+version = "4.2.0"
+name = "more-itertools"
+optional = false
+category = "dev"
+
+[package.dependencies]
+six = ">=1.0.0,<2.0.0"
+[[package]]
+platform = "UNKNOWN"
+description = "A drop-in substitute for Py2.7's new collections.OrderedDict that works in Python 2.4-2.6."
+python-versions = "*"
+version = "1.1"
+name = "ordereddict"
+optional = false
+category = "dev"
+
+[package.requirements]
+python = "<2.7"
+[[package]]
+platform = "unix"
+description = "plugin and hook calling mechanisms for python"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "0.6.0"
+name = "pluggy"
+optional = false
+category = "dev"
+
+[[package]]
+platform = "unix"
+description = "library with cross-python path, ini-parsing, io, code, log facilities"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "1.5.3"
+name = "py"
+optional = false
+category = "dev"
+
+[[package]]
+platform = "*"
+description = "Python SDL2 bindings"
+python-versions = "*"
+version = "0.9.6"
+name = "pysdl2"
+optional = false
+category = "main"
+
+[[package]]
+platform = "unix"
+description = "pytest: simple powerful testing with Python"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "3.6.0"
+name = "pytest"
+optional = false
+category = "dev"
+
+[package.dependencies]
+py = ">=1.5.0"
+funcsigs = "*"
+more-itertools = ">=4.0.0"
+colorama = "*"
+six = ">=1.10.0"
+attrs = ">=17.4.0"
+atomicwrites = ">=1.0"
+pluggy = ">=0.5,<0.7"
+setuptools = "*"
+[[package]]
+platform = "*"
+description = "Python 2 and 3 compatibility utilities"
+python-versions = "*"
+version = "1.11.0"
+name = "six"
+optional = false
+category = "dev"
+
+[metadata]
+content-hash = "fde8dee3c61f4055560e324130f44f0b670162a20b8d973b01a9d3683cab5586"
+platform = "*"
+python-versions = "*"
+
+[metadata.hashes]
+py = [ "983f77f3331356039fdd792e9220b7b8ee1aa6bd2b25f567a963ff1de5a64f6a", "29c9fab495d7528e80ba1e343b958684f4ace687327e6f789a94bf3d1915f881",]
+funcsigs = [ "330cc27ccbf7f1e992e69fef78261dc7c6569012cf397db8d3de0234e6c937ca", "a7bb0f2cf3a3fd1ab2732cb49eba4252c2af4240442415b4abce3b87022a8f50",]
+more-itertools = [ "a18d870ef2ffca2b8463c0070ad17b5978056f403fb64e3f15fe62a52db21cc0", "6703844a52d3588f951883005efcf555e49566a48afd4db4e965d69b883980d3", "2b6b9893337bfd9166bee6a62c2b0c9fe7735dcf85948b387ec8cba30e85d8e8",]
+pluggy = [ "d345c8fe681115900d6da8d048ba67c25df42973bda370783cd58826442dcd7c", "e160a7fcf25762bb60efc7e171d4497ff1d8d2d75a3d0df7a21b76821ecbf5c5", "7f8ae7f5bdf75671a718d2daf0a64b7885f74510bcd98b1a0bb420eb9a9d0cff",]
+pysdl2 = [ "b52acab5493a77b08c2afee1f385769fc2005f17cfeaf1886eff22dc78da2123",]
+ordereddict = [ "1c35b4ac206cef2d24816c89f89cf289dd3d38cf7c449bb3fab7bf6d43f01b1f",]
+attrs = [ "4b90b09eeeb9b88c35bc642cbac057e45a5fd85367b985bd2809c62b7b939265", "e0d0eb91441a3b53dab4d9b743eafc1ac44476296a2053b6ca3af0b139faf87b",]
+pytest = [ "c76e93f3145a44812955e8d46cdd302d8a45fbfc7bf22be24fe231f9d8d8853a", "39555d023af3200d004d09e51b4dd9fdd828baa863cded3fd6ba2f29f757ae2d",]
+atomicwrites = [ "a24da68318b08ac9c9c45029f4a10371ab5b20e4226738e150e6e7c571630ae6", "240831ea22da9ab882b551b31d4225591e5e447a68c5e188db5b89ca1d487585",]
+colorama = [ "463f8483208e921368c9f306094eb6f725c6ca42b0f97e313cb5d5512459feda", "48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1",]
+six = [ "832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb", "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9",]

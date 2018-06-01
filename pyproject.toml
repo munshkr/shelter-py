@@ -6,6 +6,7 @@ authors = ["Damián Silvani <munshkr@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "*"
+pysdl2 = "^0.9.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
