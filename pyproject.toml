@@ -10,3 +10,4 @@ pysdl2 = "^0.9.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
+nosy = "^1.2"
