@@ -1,4 +1,3 @@
-"""Font and text rendering routines."""
 # Shelter - ASCII/ANSI art drawing tool
 # Copyright (C) 2018  Damián Silvani
 #
@@ -14,6 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""Font and text rendering routines."""
 import os
 
 from sdl2 import pixels, rect, surface

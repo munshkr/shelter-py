@@ -1,13 +1,24 @@
 [tool.poetry]
 name = "shelter"
 version = "0.1.0"
-description = ""
+description = "A cross-platform ASCII/ANSI art drawing tool"
+license = "GPL-3.0+"
 authors = ["Damián Silvani <munshkr@gmail.com>"]
+readme = "README.md"
+homepage = "https://github.com/munshkr/shelter"
+repository = "https://github.com/munshkr/shelter"
+keywords = ["text", "editor", "sdl2", "ascii", "ansi"]
+
+[package]
+include = ["shelter/**/*.py", "res/**/*"]
 
 [tool.poetry.dependencies]
-python = "*"
+python = "^3"
 pysdl2 = "^0.9.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
 nosy = "^1.2"
+
+[tool.poetry.scripts]
+shelter = 'shelter.console:run'
