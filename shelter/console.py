@@ -17,9 +17,10 @@
 """Console script for Shelter."""
 import argparse
 import logging
+import os
 import sys
 
-from shelter import __version__, Shelter
+from shelter import Shelter, __version__
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +88,9 @@ def main(args):
     setup_logging(args.loglevel)
 
     shelter = Shelter()
-    return shelter.run()
+    shelter.run()
+
+    return os.EX_OK
 
 
 def run():

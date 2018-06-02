@@ -31,15 +31,12 @@ class Shelter:
 
         self.window = self._create_window()
         self.renderer = self._create_renderer_for(self.window)
-
         self.bitmap_font = self._create_bitmap_font()
 
         # Create a "hello world" text sprite
         self._write_hello_world()
 
         self._start_event_loop()
-
-        return 0
 
     def _write_hello_world(self):
         text_sprite = self.bitmap_font.render(('Shelter v0.1\n'
