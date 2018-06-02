@@ -16,19 +16,10 @@
 """Font and text rendering routines."""
 import os
 
-from sdl2 import pixels, rect, surface
-from sdl2.ext.color import Color, convert_to_color
+from sdl2 import rect, surface
 from sdl2.ext.common import SDLError
 #from sdl2.ext.compat import *
 from sdl2.ext.sprite import SoftwareSprite
-
-_HASSDLTTF = True
-try:
-    from sdl2 import sdlttf
-except ImportError:
-    _HASSDLTTF = False
-
-__all__ = ["BitmapFont"]
 
 
 class BitmapFont(object):
@@ -40,6 +31,8 @@ class BitmapFont(object):
     within each lines has the same size as specified by the size argument.
 
     """
+
+    TABLE_SIZE = 256
 
     def __init__(self, imgsurface, size):
         """Creates a new BitmapFont instance from the passed image.
@@ -56,12 +49,45 @@ class BitmapFont(object):
         self.size = size[0], size[1]
         self.offsets = self._calculate_offsets()
 
+    def render(self, text, bpp=None):
+        """Renders the passed text on a new Sprite and returns it."""
+        lines = text.split(os.linesep)
+        tw, th = self._calculate_text_size_from(lines)
+
+        target_sprite = self._create_sprite_for_text(tw, th, bpp=bpp)
+        self._blit_characters_on(target_sprite, lines)
+
+        return target_sprite
+
+    def render_on(self, imgsurface, text, offset=(0, 0)):
+        """Renders a text on the passed sprite, starting at a specific
+        offset.
+
+        The top-left start position of the text will be the passed offset and
+        4-value tuple with the changed area will be returned.
+        """
+        target = None
+        if isinstance(imgsurface, SoftwareSprite):
+            target = imgsurface.surface
+        elif isinstance(imgsurface, surface.SDL_Surface):
+            target = imgsurface
+        else:
+            raise TypeError('unsupported surface type')
+
+        lines = text.split(os.linesep)
+        tw, th = self._calculate_text_size_from(lines)
+
+        self._blit_characters_on(target, lines, offset=offset)
+
+        x, y = offset
+        return (x, y, tw, th)
+
     def _calculate_offsets(self):
         """Calculates the internal character offsets."""
         w, h = self.surface.w, self.surface.h
         cw, ch = self.size
 
-        assert (w * h) / (cw * ch) == 256, \
+        assert (w * h) / (cw * ch) == self.TABLE_SIZE, \
             ('image surface for bitmap font is {}x{}, '
              'but characters have {}x{}'.format(w, h, cw, ch))
 
@@ -73,84 +99,43 @@ class BitmapFont(object):
             for j in range(chars_in_row):
                 offset = rect.SDL_Rect(j * cw, i * ch, cw, ch)
                 offsets.append(offset)
-        assert len(offsets) == 256
+        assert len(offsets) == self.TABLE_SIZE
 
         return offsets
 
-    def render(self, text, bpp=None):
-        """Renders the passed text on a new Sprite and returns it."""
-        tw, th = 0, 0
-        w, h = self.size
+    def _blit_characters_on(self, target_sprite, lines, offset=None):
+        """Blit each character on surface"""
+        if offset:
+            x, y = offset
+        else:
+            x, y = 0, 0
 
-        # Calculate text width and height
-        lines = text.split(os.linesep)
-        for line in lines:
-            tw = max(tw, sum([w for c in line]))
-            th += h
+        cw, ch = self.size
+        target = target_sprite.surface
+        blit_surface = surface.SDL_BlitSurface
+        fontsf = self.surface
+        offsets = self.offsets
 
+        for i, line in enumerate(lines):
+            for j, char in enumerate(line):
+                dstr = rect.SDL_Rect(x + j * cw, y + i * ch, 0, 0)
+                offset = offsets[ord(char)]
+                blit_surface(fontsf, offset, target, dstr)
+
+    def _create_sprite_for_text(self, tw, th, bpp=None):
         # Create RGB Surface for text
         if bpp is None:
             bpp = self.surface.format.contents.BitsPerPixel
         sf = surface.SDL_CreateRGBSurface(0, tw, th, bpp, 0, 0, 0, 0)
         if not sf:
             raise SDLError()
-
         # Create software sprite from surface
-        imgsurface = SoftwareSprite(sf.contents, False)
-        target = imgsurface.surface
-        blit_surface = surface.SDL_BlitSurface
-        fontsf = self.surface
-        offsets = self.offsets
+        return SoftwareSprite(sf.contents, False)
 
-        # Blit each character on surface
-        dstr = rect.SDL_Rect(0, 0, 0, 0)
-        y = 0
-        for line in lines:
-            dstr.y = y
-            x = 0
-            for c in line:
-                dstr.x = x
-                offset = offsets[ord(c)]
-                blit_surface(fontsf, offset, target, dstr)
-                x += w
-            y += h
-
-        return imgsurface
-
-    def render_on(self, imgsurface, text, offset=(0, 0)):
-        """Renders a text on the passed sprite, starting at a specific
-        offset.
-
-        The top-left start position of the text will be the passed offset and
-        4-value tuple with the changed area will be returned.
-        """
+    def _calculate_text_size_from(self, lines):
+        tw, th = 0, 0
         w, h = self.size
-
-        target = None
-        if isinstance(imgsurface, SoftwareSprite):
-            target = imgsurface.surface
-        elif isinstance(imgsurface, surface.SDL_Surface):
-            target = imgsurface
-        else:
-            raise TypeError("unsupported surface type")
-
-        lines = text.split(os.linesep)
-        blit_surface = surface.SDL_BlitSurface
-        fontsf = self.surface
-        offsets = self.offsets
-
-        dstr = rect.SDL_Rect(0, 0, 0, 0)
-        y = offset[1]
         for line in lines:
-            dstr.y = y
-            x = offset[0]
-            for c in line:
-                dstr.x = x
-                if c in offsets:
-                    blit_surface(fontsf, offsets[c], target, dstr)
-                # elif c != ' ':
-
-                #    TODO: raise an exception for unknown char?
-                x += w
-            y += h
-        return (offset[0], offset[1], x + w, y + h)
+            tw = max(tw, sum(w for c in line))
+            th += h
+        return tw, th
