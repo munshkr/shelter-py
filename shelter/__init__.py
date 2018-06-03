@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sdl2.ext
+from shelter.buffer import TextBuffer
 from shelter.font import BitmapFont
 from shelter.renderer import SoftwareRenderSystem
 
@@ -33,15 +34,11 @@ class Shelter:
         self.renderer = self._create_renderer_for(self.window)
         self.bitmap_font = self._create_bitmap_font()
 
-        # Create a "hello world" text sprite
-        self._write_hello_world()
+        text_buffer = TextBuffer(
+            'Shelter v0.1\nThis is a test', font=self.bitmap_font)
+        self.children = [text_buffer]
 
         self._start_event_loop()
-
-    def _write_hello_world(self):
-        text_sprite = self.bitmap_font.render(('Shelter v0.1\n'
-                                               'This is a test'))
-        self.renderer.render(text_sprite)
 
     def _start_event_loop(self):
         while True:
@@ -52,6 +49,9 @@ class Shelter:
                 elif event.type == sdl2.SDL_KEYDOWN:
                     if event.key.keysym.sym == sdl2.SDLK_ESCAPE:
                         return
+                    if event.key.keysym.sym == sdl2.SDLK_h:
+                        self.children[0].text = 'Hola'
+            self._render_children()
             self.window.refresh()
 
     def _init_sdl(self):
@@ -71,3 +71,7 @@ class Shelter:
         font_path = RESOURCES.get_path(fontname)
         bitmap_image = sdl2.ext.load_image(font_path)
         return BitmapFont(bitmap_image, size=(8, 16))
+
+    def _render_children(self):
+        for child in self.children:
+            self.renderer.render(child.render())
