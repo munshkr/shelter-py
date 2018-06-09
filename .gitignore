@@ -1,4 +1,5 @@
+/dist/
 *.pyc
 .pytest_cache/
+/.venv/
 /.vscode/
-/dist/
