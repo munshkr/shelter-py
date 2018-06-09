@@ -18,11 +18,42 @@ import os
 
 from sdl2 import rect, surface
 from sdl2.ext.common import SDLError
-#from sdl2.ext.compat import *
 from sdl2.ext.sprite import SoftwareSprite
+import sdl2
+from .util import memoize
 
 
-class BitmapFont(object):
+class FontManager:
+    DEFAULT_SIZE = (8, 16)
+    DEFAULT_EXT = '.png'
+
+    def __init__(self, path, size=None, ext=None):
+        if size is None:
+            size = self.DEFAULT_SIZE
+        if ext is None:
+            ext = self.DEFAULT_EXT
+        self.size = size
+        self.ext = ext
+        self._path = path
+        self._resources = sdl2.ext.Resources(path)
+        self._bitmap_fonts = {}
+
+    @property
+    def path(self):
+        return self._path
+
+    @memoize('_bitmap_fonts')
+    def create_bitmap_font(self, name):
+        surface = self._load_bitmap(name)
+        return BitmapFont(surface, self.size)
+
+    def _load_bitmap(self, name):
+        fname = '{name}{ext}'.format(name=name, ext=self.ext)
+        path = self._resources.get_path(fname)
+        return sdl2.ext.load_image(path)
+
+
+class BitmapFont:
     """A bitmap graphics to character mapping.
 
     The BitmapFont class uses an image surface to find and render font
